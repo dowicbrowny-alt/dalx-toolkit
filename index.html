@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DALX | Client & Income Builder</title>
+  <style>
+    :root {
+      --green: #173B35;
+      --sage: #D9E7D8;
+      --cream: #F5F0E6;
+      --gold: #D69B62;
+    }
+    * { box-sizing: border-box; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body { margin: 0; background: var(--cream); color: var(--green); }
+    header { background: var(--green); color: var(--cream); padding: 20px 16px; text-align: center; border-bottom: 4px solid var(--gold); }
+    header .tag { color: var(--gold); font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; }
+    header h1 { margin: 6px 0 4px; font-size: 22px; }
+    header p { margin: 0; font-size: 13px; color: var(--sage); }
+    nav { display: grid; grid-template-columns: repeat(4, 1fr); background: #102a25; }
+    nav button { background: none; border: none; color: var(--sage); padding: 12px 4px; font-size: 12px; font-weight: 600; cursor: pointer; border-bottom: 3px solid transparent; }
+    nav button.active { color: var(--gold); border-bottom-color: var(--gold); background: rgba(255,255,255,0.05); }
+    main { max-width: 600px; margin: 0 auto; padding: 16px; }
+    .card { background: #fff; border-radius: 12px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); margin-bottom: 16px; border: 1px solid #e2ddd2; }
+    h2 { margin-top: 0; font-size: 18px; color: var(--green); }
+    label { display: block; font-size: 13px; font-weight: 600; margin: 12px 0 4px; }
+    input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; background: #fafafa; }
+    .btn { width: 100%; margin-top: 14px; padding: 12px; background: var(--green); color: var(--cream); border: none; border-radius: 8px; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .btn-gold { background: var(--gold); color: var(--green); margin-top: 8px; }
+    .output { margin-top: 14px; background: var(--sage); padding: 14px; border-radius: 8px; white-space: pre-wrap; font-size: 14px; line-height: 1.5; display: none; }
+    .day-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 8px; margin-top: 10px; }
+    .day-box { background: var(--cream); border: 2px solid var(--green); border-radius: 8px; padding: 10px 0; text-align: center; font-weight: 700; font-size: 13px; cursor: pointer; }
+    .day-box.done { background: var(--green); color: var(--gold); }
+    footer { text-align: center; padding: 20px; font-size: 12px; color: #555; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="tag">DALX • LEARN. EARN. BUILD.</div>
+  <h1>Client & Income Builder</h1>
+  <p>Created by Mr. Dowic • Your Daily Action Workspace</p>
+</header>
+
+<nav>
+  <button class="active" onclick="showTab('offer', this)">1. Offer</button>
+  <button onclick="showTab('pitch', this)">2. Pitch</button>
+  <button onclick="showTab('portfolio', this)">3. Portfolio</button>
+  <button onclick="showTab('tracker', this)">4. Tracker</button>
+</nav>
+
+<main>
+  <!-- TAB 1: OFFER BUILDER -->
+  <section id="offer" class="tab">
+    <div class="card">
+      <h2>Build Your Service Package & Price</h2>
+      <label>Choose Your Digital Skill</label>
+      <select id="skillSelect">
+        <option value="video">Short-Form Video Editing (Reels & TikToks)</option>
+        <option value="design">Instagram & WhatsApp Flyer Design</option>
+        <option value="dm">DM & WhatsApp Sales Support</option>
+        <option value="social">Social Media Page Setup & Posting</option>
+      </select>
+
+      <label>Target Business Type (e.g., Fashion Brand, Food Vendor)</label>
+      <input type="text" id="nicheInput" placeholder="e.g., Skincare Brand" />
+
+      <label>Select Currency</label>
+      <select id="currencySelect">
+        <option value="NGN">Nigerian Naira (₦)</option>
+        <option value="USD">US Dollars ($)</option>
+      </select>
+
+      <button class="btn" onclick="buildOffer()">Generate My Service Offer</button>
+      <div id="offerOutput" class="output"></div>
+      <button id="copyOfferBtn" class="btn btn-gold" style="display:none;" onclick="copyText('offerOutput')">Copy My Offer</button>
+    </div>
+  </section>
+
+  <!-- TAB 2: PITCH GENERATOR -->
+  <section id="pitch" class="tab" style="display:none;">
+    <div class="card">
+      <h2>Generate Custom Client DM / WhatsApp Script</h2>
+      <label>Business Name</label>
+      <input type="text" id="bizName" placeholder="e.g., Luxe Hair Lagos" />
+
+      <label>What Do They Sell?</label>
+      <input type="text" id="bizProduct" placeholder="e.g., luxury wigs and hair care" />
+
+      <label>Service You Are Offering</label>
+      <select id="pitchSkill">
+        <option value="edited product Reels/TikToks">Short-Form Video Editing</option>
+        <option value="promotional flyers & price lists">Flyer & Carousel Design</option>
+        <option value="fast DM & WhatsApp customer replies">DM & WhatsApp Sales Support</option>
+        <option value="daily page posting & bio setup">Social Media Page Management</option>
+      </select>
+
+      <button class="btn" onclick="buildPitch()">Generate Custom Pitch</button>
+      <div id="pitchOutput" class="output"></div>
+      <button id="copyPitchBtn" class="btn btn-gold" style="display:none;" onclick="copyText('pitchOutput')">Copy Pitch to Clipboard</button>
+    </div>
+  </section>
+
+  <!-- TAB 3: PORTFOLIO SUMMARY -->
+  <section id="portfolio" class="tab" style="display:none;">
+    <div class="card">
+      <h2>Build Your "Hire Me" Profile Card</h2>
+      <label>Your Name / Brand Name</label>
+      <input type="text" id="userName" placeholder="e.g., David • Digital Creator" />
+
+      <label>Your Main Skill</label>
+      <input type="text" id="userSkill" placeholder="e.g., Short-Form Video Editor for Brands" />
+
+      <label>Link to Your 2 Sample Projects (Google Drive / IG)</label>
+      <input type="text" id="sampleLink" placeholder="e.g., ://google.com..." />
+
+      <label>Your WhatsApp Number</label>
+      <input type="text" id="userPhone" placeholder="e.g., +234 800 000 0000" />
+
+      <button class="btn" onclick="buildPortfolio()">Create My "Hire Me" Card</button>
+      <div id="portOutput" class="output"></div>
+      <button id="copyPortBtn" class="btn btn-gold" style="display:none;" onclick="copyText('portOutput')">Copy My Profile Card</button>
+    </div>
+  </section>
+
+  <!-- TAB 4: 14-DAY TRACKER -->
+  <section id="tracker" class="tab" style="display:none;">
+    <div class="card">
+      <h2>14-Day First-Client Action Tracker</h2>
+      <p style="font-size:13px; margin-top:0;">Tap each day after sending your <strong>10 daily outreach messages</strong>:</p>
+      <div class="day-grid" id="dayGrid"></div>
+      <p id="progressText" style="font-weight:700; margin-top:14px; font-size:14px;">Completed: 0 / 14 Days</p>
+
+      <label>Log Total Earned So Far (₦ or $)</label>
+      <input type="text" id="incomeInput" placeholder="e.g., ₦25,000 or $30" oninput="saveTracker()" />
+    </div>
+  </section>
+</main>
+
+<footer>DALX • Built by Mr. Dowic • Learn. Earn. Build.</footer>
+
+<script>
+  function showTab(id, btn) {
+    document.querySelectorAll('.tab').forEach(t => t.style.display = 'none');
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    document.getElementById(id).style.display = 'block';
+    btn.classList.add('active');
+  }
+
+  function buildOffer() {
+    const skill = document.getElementById('skillSelect').value;
+    const niche = document.getElementById('nicheInput').value || 'Online Businesses';
+    const curr = document.getElementById('currencySelect').value;
+
+    const offers = {
+      video: {
+        title: 'Short-Form Video Growth Package',
+        deliver: '• 12 edited Reels/TikToks per month\n• Bold captions, clean cuts & trending audio\n• Delivered ready-to-post via WhatsApp/Drive',
+        price: curr === 'NGN' ? '₦30,000 / month' : '$40 / month'
+      },
+      design: {
+        title: 'Brand Flyer & Carousel Design Package',
+        deliver: '• 12 custom promo flyers or carousel posts/month\n• Clean layout matched to your brand colors\n• Fast 24-hour turnaround',
+        price: curr === 'NGN' ? '₦25,000 / month' : '$35 / month'
+      },
+      dm: {
+        title: 'WhatsApp & Instagram Sales Support',
+        deliver: '• Fast replies to customer inquiries & price checks\n• Polite order closing & payment follow-up\n• Daily sales summary report',
+        price: curr === 'NGN' ? '₦30,000 / month' : '$40 / month'
+      },
+      social: {
+        title: 'Social Media Page Management Package',
+        deliver: '• Complete bio & story highlight optimization\n• Consistent daily posting & caption writing\n• Weekly page activity checkup',
+        price: curr === 'NGN' ? '₦35,000 / month' : '$45 / month'
+      }
+    };
+
+    const selected = offers[skill];
+    const text = `📦 ${selected.title.toUpperCase()} FOR ${niche.toUpperCase()}\n\nWhat You Get:\n${selected.deliver}\n\nStarter Investment: ${selected.price}\nPayment Terms: 100% upfront (or 50% to start, 50% mid-month)\n\nBuilt with DALX • Learn. Earn. Build.`;
+    const out = document.getElementById('offerOutput');
+    out.textContent = text;
+    out.style.display = 'block';
+    document.getElementById('copyOfferBtn').style.display = 'block';
+  }
+
+  function buildPitch() {
+    const biz = document.getElementById('bizName').value || '[Business Name]';
+    const prod = document.getElementById('bizProduct').value || 'products';
+    const skill = document.getElementById('pitchSkill').value;
+
+    const text = `Hi ${biz}! 👋\n\nI really love your ${prod}. I noticed your page has great potential, and I actually put together a quick free sample showing how ${skill} can help you attract more buyers and save time.\n\nCan I send it over here so you can check it out? No pressure at all!`;
